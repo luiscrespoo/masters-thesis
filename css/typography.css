@@ -1,0 +1,286 @@
+/* ============================================================================
+   TYPOGRAPHY & TEXT
+   ============================================================================ */
+
+/* Section headings - all titles are centered */
+h1, h2, h3, h4, h5 {
+    text-align: center;
+}
+
+section h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+section h3 {
+    font-size: 1.4rem;
+    margin-top: 3rem;
+    margin-bottom: 1.25rem;
+    color: var(--text-primary);
+}
+
+section h4 {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+section h5 {
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Paragraphs */
+p {
+    margin-bottom: 1.25rem;
+    text-align: justify;
+}
+
+/* Text emphasis */
+strong {
+    color: var(--primary-light);
+}
+
+/* Lists */
+ul, ol {
+    margin-bottom: 1.25rem;
+    padding-left: 1.5rem;
+}
+
+li {
+    margin-bottom: 0.4rem;
+}
+
+/* Links */
+a {
+    color: var(--primary-light);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Internal references */
+.ref {
+    color: var(--primary-light);
+    text-decoration: none;
+}
+
+.ref:hover {
+    text-decoration: underline;
+}
+
+/* Citations */
+.cite {
+    color: var(--primary-light);
+    text-decoration: none;
+    font-size: 0.9em;
+    cursor: pointer;
+    padding: 0.1em 0.2em;
+    border-radius: 3px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.cite:hover {
+    background: var(--hover-bg);
+}
+
+.cite.cite-active {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Citation Tooltip - Speech bubble style */
+.cite-tooltip {
+    position: absolute;
+    z-index: 3000; /* Above lightbox (2000) */
+    max-width: 360px;
+    min-width: 260px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    pointer-events: none;
+}
+
+.cite-tooltip.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.cite-tooltip.above {
+    transform: translateY(-8px);
+}
+
+.cite-tooltip.above.visible {
+    transform: translateY(0);
+}
+
+/* Arrow pointing to citation */
+.cite-tooltip-arrow {
+    position: absolute;
+    top: -8px;
+    width: 16px;
+    height: 8px;
+    overflow: hidden;
+}
+
+.cite-tooltip-arrow::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 12px;
+    height: 12px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 2px;
+}
+
+/* Arrow when tooltip is above citation */
+.cite-tooltip.above .cite-tooltip-arrow {
+    top: auto;
+    bottom: -8px;
+    transform: rotate(180deg);
+}
+
+.cite-tooltip-content {
+    position: relative;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.cite-tooltip-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    line-height: 1;
+    opacity: 0.6;
+    transition: opacity 0.2s, color 0.2s;
+    z-index: 1;
+}
+
+.cite-tooltip-close:hover {
+    opacity: 1;
+    color: var(--text-primary);
+}
+
+.cite-tooltip-body {
+    position: relative;
+    padding: 1rem;
+    padding-right: 2rem;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.cite-authors {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.cite-title {
+    color: var(--text-primary);
+    font-style: italic;
+    margin-bottom: 0.4rem;
+}
+
+.cite-pub {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+/* Source link icon */
+.cite-source-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.6rem;
+    color: var(--text-secondary);
+    padding: 0.3rem;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+}
+
+.cite-source-link:hover {
+    color: var(--primary-light);
+    background: var(--hover-bg);
+}
+
+.cite-source-link .icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* Mobile tooltip adjustments */
+@media (max-width: 600px) {
+    .cite-tooltip {
+        max-width: calc(100vw - 32px);
+        min-width: 240px;
+        left: 16px !important;
+        right: 16px;
+    }
+}
+
+/* Inline code */
+code {
+    font-family: var(--font-mono);
+    background: var(--surface-color);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: var(--primary-light);
+}
+
+/* Definition lists */
+.definition-list {
+    margin: 1.5rem 0;
+}
+
+.definition-list dt {
+    color: var(--primary-light);
+    margin-bottom: 0.25rem;
+}
+
+.definition-list dd {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+}
+
+/* Special text styles */
+.boxed {
+    display: inline-block;
+    border: 2px solid var(--primary-color);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.smallcaps {
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+}
+
+

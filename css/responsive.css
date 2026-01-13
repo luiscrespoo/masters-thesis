@@ -1,0 +1,69 @@
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+/* Tablets and mobile devices */
+@media (max-width: 1000px) {
+    /* Hide sidebar by default, slide in when opened */
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    /* Remove left margin, use viewport-relative padding (bigger margins) */
+    .main-content {
+        margin-left: 0;
+        padding: 4rem clamp(1.5rem, 8vw, 3rem) 2rem;
+    }
+
+    /* Ensure content inner doesn't overflow */
+    .content-inner {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    /* Show mobile menu toggle button */
+    .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Header adjustments */
+    header {
+        padding: 1rem clamp(1.5rem, 8vw, 3rem);
+    }
+
+    .header-inner {
+        max-width: 100%;
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    section h2 {
+        font-size: 1.4rem;
+    }
+
+    section h3 {
+        font-size: 1.2rem;
+    }
+
+    /* Smaller base font on mobile */
+    main {
+        font-size: 1rem;
+    }
+
+    /* Still decent margins on small screens */
+    .main-content {
+        padding: 3.5rem clamp(1.25rem, 6vw, 2rem) 1.5rem;
+    }
+}
+

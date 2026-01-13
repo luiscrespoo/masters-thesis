@@ -1,0 +1,42 @@
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+/* Scroll reveal animation - elements fade in as they enter viewport */
+header .header-inner > *,
+main p,
+main li,
+main h2,
+main h3,
+main h4,
+main h5,
+.figure,
+.equation,
+.algorithm,
+blockquote,
+table,
+.bib-entry {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+/* Revealed state - visible and in position */
+header .header-inner > *.revealed,
+main p.revealed,
+main li.revealed,
+main h2.revealed,
+main h3.revealed,
+main h4.revealed,
+main h5.revealed,
+.figure.revealed,
+.equation.revealed,
+.algorithm.revealed,
+blockquote.revealed,
+table.revealed,
+.bib-entry.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+

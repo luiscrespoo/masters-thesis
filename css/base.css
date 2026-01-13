@@ -1,0 +1,86 @@
+/* ============================================================================
+   CSS VARIABLES & THEME CONFIGURATION
+   ============================================================================ */
+
+:root {
+    /* Primary Brand Color */
+    --primary-color: #3b82f6;
+    --primary-light: #60a5fa;
+
+    /* Dark Theme Colors (Default) */
+    --background-color: #0f172a;
+    --surface-color: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border-color: #334155;
+    --hover-bg: rgba(59, 130, 246, 0.1);
+
+    /* Typography */
+    --font-serif: 'Libertinus Serif', Georgia, serif;
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+/* Light Theme Color Overrides */
+[data-theme="light"] {
+    --background-color: #f8fafc;
+    --surface-color: #e2e8f0;
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
+    --border-color: #cbd5e1;
+    --hover-bg: rgba(59, 130, 246, 0.08);
+}
+
+
+/* ============================================================================
+   BASE STYLES & RESET
+   ============================================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: auto;
+    scroll-snap-type: y proximity;
+    scrollbar-gutter: stable;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    line-height: 1.7;
+}
+
+/* Disable all transitions initially (removed by JS after load) */
+.no-transition,
+.no-transition * {
+    transition: none !important;
+}
+
+/* Theme transitions - smooth synchronized fade */
+body,
+.sidebar,
+.sidebar-header,
+.sidebar-title,
+.sidebar a,
+.main-content,
+h1, h2, h3, h4, h5, h6,
+p, li, span,
+th, td,
+.bib-entry,
+.algorithm,
+.equation,
+.figure,
+.caption,
+code, pre,
+blockquote,
+.theme-toggle,
+footer {
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+

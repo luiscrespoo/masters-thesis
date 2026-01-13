@@ -1,0 +1,282 @@
+/* ============================================================================
+   SPECIAL CONTENT (Figures, Equations, Tables, Algorithms)
+   ============================================================================ */
+
+/* --- Figures --- */
+.figure {
+    margin: 2.5rem 0;
+    text-align: center;
+    scroll-margin-top: 6rem;
+}
+
+.figure img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+    cursor: zoom-in;
+    /* Light background for dark mode visibility of transparent PNGs */
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.figure img:hover {
+    transform: scale(1.02);
+}
+
+/* Captions (for figures and tables) */
+.caption {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.75rem;
+    font-style: italic;
+    text-align: center;
+}
+
+.caption a {
+    color: var(--primary-light) !important;
+    text-decoration: none;
+    cursor: pointer;
+    pointer-events: auto;
+    position: relative;
+    z-index: 10;
+}
+
+.caption a:hover {
+    text-decoration: underline;
+    color: var(--primary-color) !important;
+}
+
+/* --- Equations --- */
+.equation {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-margin-top: 6rem;
+}
+
+/* Inner wrapper - positions equation centered, label on right */
+.equation-inner {
+    display: table;
+    width: 100%;
+    min-width: max-content;
+    padding: 1rem 0;
+}
+
+/* MathJax container - centered */
+.equation-inner .MathJax {
+    display: table-cell;
+    text-align: center;
+    width: 100%;
+}
+
+/* Equation numbering label - right side, vertically centered */
+.equation-label {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: right;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    padding-left: 1rem;
+    padding-right: 0.5rem;
+}
+
+/* --- Tables --- */
+.results-table {
+    margin: 2rem 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-margin-top: 6rem;
+}
+
+/* Inner wrapper to keep table + caption together when scrolling */
+.table-inner {
+    display: inline-block;
+    min-width: 100%;
+}
+
+table {
+    width: 100%;
+    min-width: max-content;
+    border-collapse: collapse;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+}
+
+th, td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background 0.15s;
+    user-select: none;
+}
+
+th {
+    background: var(--hover-bg);
+    color: var(--primary-light);
+    font-weight: 600;
+}
+
+th:hover, td:hover {
+    background: rgba(59, 130, 246, 0.15);
+}
+
+/* Selected table cells */
+.selected {
+    background: rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Highlighted table rows (gray background) */
+tr.highlighted-row td {
+    background: rgba(128, 128, 128, 0.15);
+}
+
+tr.highlighted-row td:hover {
+    background: rgba(128, 128, 128, 0.25);
+}
+
+/* --- Algorithms --- */
+.algorithm {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin: 2rem 0;
+    scroll-margin-top: 6rem;
+}
+
+.algo-caption {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.75rem 1rem;
+    margin: 0;
+    font-family: var(--font-sans);
+}
+
+.algo-content {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+/* Pseudocode blocks */
+.pseudocode {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    white-space: pre;
+    overflow-x: auto;
+    padding: 1rem;
+    margin: 0;
+    background: var(--background-color);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-style: normal;
+}
+
+.pseudocode strong {
+    color: var(--primary-light);
+    font-weight: 600;
+}
+
+.pseudocode em {
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* --- Bibliography --- */
+#bib-list {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+#bib-list p {
+    margin-bottom: 0;
+    text-align: left;
+    font-size: 0.92rem;
+}
+
+.bib-entry {
+    padding: 1rem 1.25rem 1rem 1rem;
+    padding-left: 4.5rem;
+    background: var(--surface-color);
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    position: relative;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.bib-entry:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 12px rgba(59, 130, 246, 0.1);
+}
+
+.bib-entry::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--primary-color);
+    border-radius: 10px 0 0 10px;
+}
+
+.bib-key {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 0.85rem;
+    min-width: 2.5rem;
+    text-align: center;
+    padding: 0.2rem 0.4rem;
+    background: var(--hover-bg);
+    border-radius: 5px;
+}
+
+.bib-authors {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.bib-title {
+    color: var(--text-primary);
+}
+
+.bib-entry em {
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.bib-entry a.bib-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    padding: 0.3rem;
+    margin-left: 0.25rem;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+    vertical-align: middle;
+}
+
+.bib-entry a.bib-link:hover {
+    color: var(--primary-light);
+    background: var(--hover-bg);
+    text-decoration: none;
+}
+
+.bib-link .icon {
+    width: 14px;
+    height: 14px;
+}
+
+

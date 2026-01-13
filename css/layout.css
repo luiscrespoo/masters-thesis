@@ -1,0 +1,720 @@
+/* ============================================================================
+   LAYOUT STRUCTURE
+   ============================================================================ */
+
+/* Main page wrapper containing sidebar + content */
+.page-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Main content area (right side) */
+.main-content {
+    flex: 1;
+    margin-left: 400px;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 2rem;
+}
+
+/* Inner content wrapper with max width */
+.content-inner {
+    max-width: 800px;
+    width: 100%;
+}
+
+
+/* ============================================================================
+   SIDEBAR & NAVIGATION
+   ============================================================================ */
+
+/* Fixed sidebar (left side) */
+.sidebar {
+    width: 375px;
+    flex-shrink: 0;
+    background-color: var(--surface-color);
+    border-right: 1px solid var(--border-color);
+    padding: 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
+    z-index: 100;
+}
+
+/* Sidebar header: sticky at top, [logo] [title] [theme] in one row */
+.sidebar-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 0.75rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    flex-shrink: 0;
+    background-color: var(--surface-color);
+    border-radius: 0;
+}
+
+.sidebar-header:hover {
+    background: var(--hover-bg);
+}
+
+.sidebar-header.active {
+    background: var(--hover-bg);
+    box-shadow: inset 3px 0 0 var(--primary-color);
+    border-radius: 8px;
+}
+
+/* Logo container - left side */
+.header-logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sidebar-logo {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    background: #fff;
+    padding: 3px;
+    display: block;
+}
+
+/* Title container - middle (can wrap) */
+.header-title-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.sidebar-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.35;
+    display: block;
+}
+
+/* Theme button container - right side */
+.header-theme-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Scrollable sidebar content */
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.35rem;
+    border-radius: 50%;
+    transition: background 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.theme-toggle:hover {
+    background: var(--hover-bg);
+    transform: scale(1.1);
+}
+
+.theme-toggle svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--text-primary);
+    fill: none;
+    transition: stroke 0.3s;
+}
+
+/* Hide both icons by default, JS will show the correct one */
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+    display: none;
+}
+
+/* Fallback: show moon in light mode, sun in dark mode (before JS loads) */
+[data-theme="light"] .theme-toggle .icon-moon {
+    display: block;
+}
+
+[data-theme="dark"] .theme-toggle .icon-sun {
+    display: block;
+}
+
+/* Navigation area (scrollable) */
+.sidebar-nav {
+    flex: 1;
+}
+
+/* Navigation lists */
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar > .sidebar-nav > ul > li {
+    margin-bottom: 0.15rem;
+}
+
+/* Navigation row (for items with collapse button) */
+.nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-row a {
+    flex: 1;
+}
+
+/* Navigation links */
+.sidebar a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.88rem;
+    display: block;
+    padding: 0.45rem 0.75rem;
+    border-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    line-height: 1.4;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar a:hover {
+    color: var(--primary-light);
+    background: var(--hover-bg);
+}
+
+/* Active section highlighting */
+.sidebar a.active {
+    color: var(--text-primary);
+    background: var(--hover-bg);
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--primary-color);
+}
+
+/* Ancestor of active section highlighting */
+.sidebar a.ancestor-active {
+    color: var(--text-primary);
+    font-weight: 500;
+    box-shadow: inset 2px 0 0 var(--primary-light);
+}
+
+/* Toggle button for collapsible sections */
+.toggle-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.7rem;
+    opacity: 0.5;
+    transition: opacity 0.2s, transform 0.2s, color 0.2s;
+    border-radius: 4px;
+    margin-right: 0.25rem;
+}
+
+.toggle-btn:hover {
+    opacity: 1;
+    color: var(--primary-light);
+    background: var(--hover-bg);
+}
+
+/* Nested subsections (collapsible) */
+.sidebar ul ul,
+.sidebar .subsections {
+    margin-left: 0.25rem;
+    padding-left: 0.5rem;
+    border-left: 1px solid var(--border-color);
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+/* Expanded subsections */
+.has-children.open > ul,
+.has-children.open > .subsections {
+    max-height: 2000px;
+    opacity: 1;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Mobile menu toggle button */
+.menu-toggle {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 99;
+    background: var(--surface-color);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.25rem;
+    transition: all 0.2s;
+}
+
+.menu-toggle:hover {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+/* Hide menu toggle when sidebar is open */
+body.sidebar-open .menu-toggle {
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+/* ============================================================================
+   5. MAIN CONTENT AREA
+   ============================================================================ */
+
+/* Document header (title, author, affiliation) */
+header {
+    text-align: center;
+    height: 100vh;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    border-bottom: none;
+    margin-bottom: 0;
+    position: relative;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+/* Inner wrapper for header content - auto margins center vertically when space available */
+.header-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+/* Scroll down button - part of content flow */
+.scroll-down-btn {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0; /* Ensure no bottom margin for symmetry */
+    border-radius: 8px;
+    transition: opacity 0.3s ease-out, background 0.2s;
+}
+
+/* Only bounce after revealed */
+.scroll-down-btn.revealed {
+    animation: bounce 2s infinite;
+}
+
+.scroll-down-btn:hover {
+    background: var(--hover-bg);
+}
+
+/* Hide scroll button when viewing main */
+.viewing-main .scroll-down-btn {
+    display: none;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-8px); }
+    60% { transform: translateY(-4px); }
+}
+
+/* Header logo (TFM logo above title) */
+.header-logo {
+    width: 120px;
+    height: auto;
+    margin-top: 0; /* Ensure no top margin for symmetry */
+    margin-bottom: 1.5rem;
+    border-radius: 16px;
+    transition: transform 0.3s ease;
+    /* Light background for dark mode visibility */
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-logo:hover {
+    transform: scale(1.05);
+}
+
+header h1 {
+    font-family: var(--font-serif);
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    line-height: 1.25;
+}
+
+header p {
+    text-align: center;
+    margin-bottom: 0.25rem;
+}
+
+header .author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.author-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-light);
+}
+
+.author-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    padding: 0.3rem;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+}
+
+.author-link:hover {
+    color: var(--primary-light);
+    background: var(--hover-bg);
+}
+
+.author-link .icon {
+    width: 18px;
+    height: 18px;
+}
+
+header .affiliation,
+header .date {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+/* Tutors section */
+.tutors {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.tutors-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem !important;
+    font-style: italic;
+}
+
+.tutor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem !important;
+}
+
+.tutor-name {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--primary-light);
+}
+
+.tutor-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    padding: 0.3rem;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+}
+
+.tutor-link:hover {
+    color: var(--primary-light);
+    background: var(--hover-bg);
+}
+
+/* Generic icon class for SVG sprites */
+.icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+}
+
+.tutor-link .icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* PDF link container */
+.pdf-link-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.pdf-link-container span {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.pdf-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-light);
+    padding: 0.4rem;
+    border-radius: 8px;
+    background: var(--hover-bg);
+    transition: color 0.2s, background 0.2s, transform 0.2s;
+}
+
+.pdf-link:hover {
+    color: white;
+    background: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.pdf-link .icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Collaboration section */
+.collaboration {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-top: 1.5rem;
+    margin-bottom: 1rem !important;
+}
+
+/* Institution logos row */
+.institution-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.institution-logos a {
+    display: block;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.institution-logos a:hover {
+    transform: scale(1.08);
+}
+
+.institution-logos img {
+    height: 60px;
+    width: auto;
+    max-width: 150px;
+    object-fit: contain;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    /* Light background for dark mode visibility */
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header credits - horizontal layout for collaboration and supervision */
+.header-credits {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 4rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.collaboration-column,
+.supervision-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.collaboration-column .collaboration,
+.supervision-column .collaboration {
+    margin-top: 0;
+    margin-bottom: 1rem !important;
+}
+
+.collaboration-column .institution-logos {
+    margin-top: 0;
+}
+
+/* Responsive: stack vertically on small screens */
+@media (max-width: 700px) {
+    .header-credits {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+    }
+}
+
+/* Main content sections */
+main {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    scroll-snap-align: start;
+    padding-top: 3rem;
+}
+
+/* --- View State: Header/Main Slide System ---
+   Header and main are mutually exclusive - only one is visible at a time.
+   Instant switch with no animation to avoid jank.
+   Classes can be on html (for blocking script) or body (for JS). */
+
+/* Viewing Header State - show header, hide main and footer */
+html.viewing-header,
+body.viewing-header {
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* Remove main-content padding when viewing header to avoid gap */
+html.viewing-header .main-content,
+body.viewing-header .main-content {
+    padding: 0;
+}
+
+html.viewing-header header,
+body.viewing-header header {
+    display: flex;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+html.viewing-header main,
+body.viewing-header main,
+html.viewing-header footer,
+body.viewing-header footer {
+    display: none !important;
+}
+
+/* Viewing Main State - hide header, show main and footer */
+html.viewing-main header,
+body.viewing-main header {
+    display: none !important;
+}
+
+html.viewing-main main,
+body.viewing-main main {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+html.viewing-main footer,
+body.viewing-main footer {
+    display: block;
+}
+
+/* Disable scroll snapping when in main view to allow normal scrolling */
+html.viewing-main,
+body.viewing-main {
+    scroll-snap-type: none;
+}
+
+section {
+    margin-bottom: 5rem;
+    scroll-margin-top: 2rem;
+}
+
+/* Chapter numbers */
+.chapter-number {
+    font-family: var(--font-sans);
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* Footer */
+footer {
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    color: var(--text-secondary);
+    margin-top: 3rem;
+}
+
+footer p {
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.back-to-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: var(--hover-bg);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.back-to-top:hover {
+    background: var(--primary-color);
+    color: #fff;
+    text-decoration: none;
+}
+
+

@@ -61,6 +61,12 @@
         font-size: 1rem;
     }
 
+    html,
+    body {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
     /* Still decent margins on small screens */
     .main-content {
         padding: 3.5rem clamp(1.25rem, 6vw, 2rem) 1.5rem;
@@ -71,8 +77,31 @@
         font-size: 0.75rem;
     }
 
+    /* Keep caption links same size as caption text */
+    .caption a {
+        font-size: 1em;
+    }
+
+    /* Keep table captions aligned with other captions */
+    .results-table .caption,
+    .table-inner .caption {
+        font-size: 0.75rem;
+    }
+
+    /* Inline tables should be slightly smaller on mobile */
+    .inline-table-wrap {
+        font-size: 0.8rem;
+    }
+
+    table.inline-table {
+        font-size: 0.8rem;
+    }
+
     /* Prevent mobile text autoscaling from shrinking table columns */
-    .results-table table {
+    .results-table,
+    .results-table table,
+    .inline-table-wrap,
+    .inline-table-wrap table {
         -webkit-text-size-adjust: 100%;
         text-size-adjust: 100%;
     }

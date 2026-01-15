@@ -103,6 +103,7 @@
 .table-inner {
     display: inline-block;
     min-width: 100%;
+    width: max-content;
 }
 
 table {
@@ -282,4 +283,3 @@ tr.highlighted-row td:hover {
     width: 14px;
     height: 14px;
 }
-

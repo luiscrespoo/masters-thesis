@@ -70,5 +70,10 @@
     .caption {
         font-size: 0.75rem;
     }
-}
 
+    /* Prevent mobile text autoscaling from shrinking table columns */
+    .results-table table {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+}

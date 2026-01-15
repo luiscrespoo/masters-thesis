@@ -4617,18 +4617,22 @@ Based on the strength of this evidence, we retain the selected LR scheduler for 
        <p>
         Thus, the final configuration for this one-stage strategy is:
        </p>
-       <table class="inline-table">
-        <tbody>
-         <tr>
-          <td>
-           <span class="boxed"><strong>FT$_{[1,2]}$</strong></span>
-          </td>
-          <td>
-           LR: $10^{-3}$ | Batch size: 32 | Dataset rep.: 5 | Dropout: 0.5 | LR scheduler: One Cycle.
-          </td>
-         </tr>
-        </tbody>
-       </table>
+       <p>
+       <div class="inline-table-wrap">
+        <table class="inline-table">
+                <tbody>
+                <tr>
+                <td>
+                <span class="boxed"><strong>FT$_{[1,2]}$</strong></span>
+                </td>
+                <td>
+                LR: $10^{-3}$ | Batch size: 32 | Dataset rep.: 5 | Dropout: 0.5 | LR scheduler: One Cycle.
+                </td>
+                </tr>
+                </tbody>
+        </table>
+        </div>
+        </p>
        <p>
         The selected configuration ranked 14th in the grid search,
 as noted in <a class="ref" href="#tab-chosen_configs">Table 8</a>.
@@ -4664,19 +4668,23 @@ When the number of repetitions is sufficient, we observed that runs using this h
        <p>
         Based on these observations, we adopt safe settings, resulting in the following configuration:
        </p>
-       <table class="inline-table">
-        <tbody>
-         <tr>
-          <td>
-           <span class="boxed"><strong>FT$_{[1]}$</strong></span>
-          </td>
-          <td>
-           LR: $10^{-2}$ |
-        Batch size: 32 | Dataset rep.: 3 | Dropout: 0.3 | LR scheduler: One Cycle.
-          </td>
-         </tr>
-        </tbody>
-       </table>
+       <p>
+       <div class="inline-table-wrap">
+        <table class="inline-table">
+                <tbody>
+                <tr>
+                <td>
+                <span class="boxed"><strong>FT$_{[1]}$</strong></span>
+                </td>
+                <td>
+                LR: $10^{-2}$ |
+                Batch size: 32 | Dataset rep.: 3 | Dropout: 0.3 | LR scheduler: One Cycle.
+                </td>
+                </tr>
+                </tbody>
+        </table>
+        </div>
+        </p>
        <p>
         We select the checkpoint with the highest validation macro-F$1$ score for the chosen configuration, with performance reported in <a class="ref" href="#tab-chosen_configs">Table 8</a>,
 as a strong starting point for the next stage. 
@@ -4824,18 +4832,22 @@ indicating a clear trend.
         For the final setup, we also select $5$ repetitions, a batch size of $64$ and a dropout rate of $0.5$,  
 seeking a reduction on the effective learning rate and to mitigate overfitting:
        </p>
-       <table class="inline-table">
-        <tbody>
-         <tr>
-          <td>
-           <span class="boxed"><strong>FT$_{[2]}$</strong></span>
-          </td>
-          <td>
-           LR: $10^{-3}$ | Batch size: 64 | Dataset rep.: 5 | Dropout: 0.5 | LR scheduler: One Cycle.
-          </td>
-         </tr>
-        </tbody>
-       </table>
+        <p>
+        <div class="inline-table-wrap">
+        <table class="inline-table">
+                <tbody>
+                <tr>
+                <td>
+                <span class="boxed"><strong>FT$_{[2]}$</strong></span>
+                </td>
+                <td>
+                LR: $10^{-3}$ | Batch size: 64 | Dataset rep.: 5 | Dropout: 0.5 | LR scheduler: One Cycle.
+                </td>
+                </tr>
+                </tbody>
+        </table>
+        </div>
+        </p>
        <p>
         However, performance dispersion was low in the grid search: over 85% of runs reached a validation macro-F1 above 
 $0.85$, and over 50% exceeded $0.89$. Given the strong initialization from FT$_{[1]}$, 
@@ -4856,18 +4868,22 @@ the performance distribution across all runs of FT$_{[2]}$ stage.
 Similarly to FT$_{[1]}$, $10^{-2}$ consistently yields the best average performance across all batch sizes, as shown in the right panel of <a class="ref" href="#fig-lpvsfine">Figure 29</a>.  
 The same holds for every dropout rate and dataset repetition count, so we maintain the same configuration:
        </p>
-       <table class="inline-table">
-        <tbody>
-         <tr>
-          <td>
-           <span class="boxed"><strong>LP$_{[1]}$</strong></span>
-          </td>
-          <td>
-           LR: $10^{-2}$ | Batch size: 32 | Dataset rep.: 3 | Dropout: 0.3 | LR scheduler: One Cycle.
-          </td>
-         </tr>
-        </tbody>
-       </table>
+       <p>
+       <div class="inline-table-wrap">
+        <table class="inline-table">
+                <tbody>
+                <tr>
+                <td>
+                <span class="boxed"><strong>LP$_{[1]}$</strong></span>
+                </td>
+                <td>
+                LR: $10^{-2}$ | Batch size: 32 | Dataset rep.: 3 | Dropout: 0.3 | LR scheduler: One Cycle.
+                </td>
+                </tr>
+                </tbody>
+        </table>
+       </div>
+       </p>
        <p>
         Following the idea that the linear layer benefits from higher learning rates <a class="cite" href="#ref-166">[166]</a>,  
 we conducted additional experiments with values $5 \times 10^{-2}$ and $10^{-1}$, keeping the rest of the setup fixed.  
@@ -4883,18 +4899,22 @@ although slightly shifted towards lower scores. This can be attributed to the li
 Even so, several configurations would have been acceptable; however, a learning rate of $10^{-3}$ consistently outperformed the others. 
 Accordingly, we retain the same configuration as in FT$_{[2]}$, given its strong performance in this stage as well, and in line with the previous discussion:
        </p>
-       <table class="inline-table">
-        <tbody>
-         <tr>
-          <td>
-           <span class="boxed"><strong>FT'$_{[2]}$</strong></span>
-          </td>
-          <td>
-           LR: $10^{-3}$ | Batch size: 64 | Dataset rep.: 5 | Dropout: 0.5 | LR scheduler: One Cycle.
-          </td>
-         </tr>
-        </tbody>
-       </table>
+       <p>
+       <div class="inline-table-wrap">
+        <table class="inline-table">
+                <tbody>
+                <tr>
+                <td>
+                <span class="boxed"><strong>FT'$_{[2]}$</strong></span>
+                </td>
+                <td>
+                LR: $10^{-3}$ | Batch size: 64 | Dataset rep.: 5 | Dropout: 0.5 | LR scheduler: One Cycle.
+                </td>
+                </tr>
+                </tbody>
+        </table>
+        </div>
+        </p>
        <h5 id="subsubsec-ft_lp">
         FT-LP
        </h5>
@@ -4910,18 +4930,20 @@ The remaining configuration was chosen to mirror FT$_{[2]}$ and $\mathrm{FT'}_{[
 while maintaining a balance between overfitting prevention and the updates-per-epoch trade-off:
         </p>
         <p>
-         <table class="inline-table">
-          <tbody>
-           <tr>
-            <td>
-             <span class="boxed"><strong>LP$_{[2]}$</strong></span>
-            </td>
-            <td>
-             LR: $10^{-2}$ | Batch size: 64 | Dataset rep.: 5 | Dropout: 0.5 | LR scheduler: One Cycle.
-            </td>
-           </tr>
-          </tbody>
-         </table>
+        <div class="inline-table-wrap">
+        <table class="inline-table">
+                <tbody>
+                <tr>
+                <td>
+                <span class="boxed"><strong>LP$_{[2]}$</strong></span>
+                </td>
+                <td>
+                LR: $10^{-2}$ | Batch size: 64 | Dataset rep.: 5 | Dropout: 0.5 | LR scheduler: One Cycle.
+                </td>
+                </tr>
+                </tbody>
+        </table>
+        </div>
         </p>
         <p>
         </p>

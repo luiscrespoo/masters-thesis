@@ -211,6 +211,12 @@ function scrollSidebarToActive(activeId) {
 
 // Reveal elements immediately when switching views.
 export function revealAllInView(view) {
+    if (view === 'main') {
+        // Avoid revealing the entire document at once (Safari jank).
+        updateScrollReveal();
+        return;
+    }
+
     const selector = view === 'header'
         ? 'header .header-inner > *'
         : 'main p, main li, main h2, main h3, main h4, main h5, .figure, .equation, .algorithm, blockquote, table, .bib-entry';

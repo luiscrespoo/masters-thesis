@@ -92,6 +92,13 @@
     scroll-margin-top: 6rem;
 }
 
+/* Inline tables (single-row configs) should scroll on narrow screens */
+.inline-table-wrap {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 /* Inner wrapper to keep table + caption together when scrolling */
 .table-inner {
     display: inline-block;
@@ -275,5 +282,4 @@ tr.highlighted-row td:hover {
     width: 14px;
     height: 14px;
 }
-
 

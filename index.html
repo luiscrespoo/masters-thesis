@@ -3102,21 +3102,53 @@ which essentially <em>drops joints out</em> (i.e., sets their coordinates to zer
        <div class="algorithm" data-number="1" id="alg-keypoint_elimination">
         <p class="algo-caption"> <strong>Algorithm 1: Structured Joint Dropout</strong> </p>
         <div class="algo-content">
-         <pre class="pseudocode"> <strong>Input:</strong> Skeleton X ∈ ℝ<sup>W×K×C</sup>; base map p ∈ ℝ<sup>K</sup>; decay δ ∈ (0,1];
+         <pre class="pseudocode"> 
+<strong>Input:</strong> Skeleton X ∈ ℝ<sup>W×K×C</sup>; base map p ∈ ℝ<sup>K</sup>; decay δ ∈ (0,1];
        skip prob p_skip; per-frame prob p_frame; second-zone prob p_2nd;
-       graph Neigh(·) (COCO edges ∪ symmetry) <strong>Output:</strong> Masked skeleton X'
+       graph Neigh(·) (COCO edges ∪ symmetry) 
+<strong>Output:</strong> Masked skeleton X'
 
-1: <strong>if</strong> Uniform(0,1) &lt; p_skip <strong>then</strong> 2: <strong>return</strong> X <em>// skip transform</em> 3: <strong>end if</strong> 4:  Z ← ∅ <em>// set of joints to remove</em> 5:  n_zones ← 1 + 𝟙[Uniform(0,1) &lt; p_2nd]
+1: <strong>if</strong> Uniform(0,1) &lt; p_skip <strong>then</strong>
+2:      <strong>return</strong> X       <em>// skip transform</em>
+3: <strong>end if</strong>
 
-6: <strong>for</strong> z = 1 <strong>to</strong> n_zones <strong>do</strong> 7:      Sample seed s ~ Categorical(p / Σp)
+4: Z ← ∅        <em>// set of joints to remove</em>
+5: n_zones ← 1 + 𝟙[Uniform(0,1) &lt; p_2nd]
+
+6: <strong>for</strong> z = 1 <strong>to</strong> n_zones <strong>do</strong>
+7:      Sample seed s ~ Categorical(p / Σp)
 8:      Q ← [(s, 1)]; Z ← Z ∪ {s}
-9: <strong>while</strong> Q not empty <strong>do</strong> 10:         (j, q) ← pop_front(Q); q' ← q · δ <em>// hop-wise decay</em> 11:         C ← {n ∈ Neigh(j) | n ∉ Z}
-12: <strong>if</strong> C ≠ ∅ <strong>then</strong> 13:             π(n) ← p[n] / Σ_{c∈C} p[c] <em>// normalize neighbor priorities</em> 14: <strong>for all</strong> n ∈ C <strong>do</strong> 15: <strong>if</strong> Uniform(0,1) &lt; q' · π(n) <strong>then</strong> 16:                     Z ← Z ∪ {n}; push_back(Q, (n, q'))
-17: <strong>end if</strong> 18: <strong>end for</strong> 19: <strong>end if</strong> 20: <strong>end while</strong> 21: <strong>end for</strong> <em>// Temporal mask with persistence</em> 22: F[1] ← [Uniform(0,1) &lt; p_frame]
-23: <strong>for</strong> w = 2 <strong>to</strong> W <strong>do</strong> 24:     p_w ← min(p_frame × (1.5 if F[w-1]=1 else 1), 1)
+9:      <strong>while</strong> Q not empty <strong>do</strong>
+10:             (j, q) ← pop_front(Q); q' ← q · δ       <em>// hop-wise decay</em>
+11:             C ← {n ∈ Neigh(j) | n ∉ Z}
+12:             <strong>if</strong> C ≠ ∅ <strong>then</strong>
+13:                     π(n) ← p[n] / Σ_{c∈C} p[c]      <em>// normalize neighbor priorities</em>
+14:                     <strong>for all</strong> n ∈ C <strong>do</strong>
+15:                             <strong>if</strong> Uniform(0,1) &lt; q' · π(n) <strong>then</strong>
+16:                                     Z ← Z ∪ {n}; push_back(Q, (n, q'))
+17:                             <strong>end if</strong>
+18:                     <strong>end for</strong>
+19:             <strong>end if</strong>
+20:     <strong>end while</strong>
+21: <strong>end for</strong> 
+
+    <em>// Temporal mask with persistence</em>
+22: F[1] ← [Uniform(0,1) &lt; p_frame]
+23: <strong>for</strong> w = 2 <strong>to</strong> W <strong>do</strong>
+24:     p_w ← min(p_frame × (1.5 if F[w-1]=1 else 1), 1)
 25:     F[w] ← [Uniform(0,1) &lt; p_w]
-26: <strong>end for</strong> <em>// Apply zeroing on selected frames and joints</em> 27: <strong>for</strong> w = 1 <strong>to</strong> W <strong>do</strong> 28: <strong>if</strong> F[w] = 1 <strong>then</strong> 29: <strong>for all</strong> j ∈ Z <strong>do</strong> 30:             X[w, j, :] ← 0
-31: <strong>end for</strong> 32: <strong>end if</strong> 33: <strong>end for</strong> 34: <strong>return</strong> X
+26: <strong>end for</strong> 
+
+    <em>// Apply zeroing on selected frames and joints</em>
+27: <strong>for</strong> w = 1 <strong>to</strong> W <strong>do</strong>
+28:     <strong>if</strong> F[w] = 1 <strong>then</strong>
+29:             <strong>for all</strong> j ∈ Z <strong>do</strong>
+30:                     X[w, j, :] ← 0
+31:             <strong>end for</strong>
+32:     <strong>end if</strong>
+33: <strong>end for</strong>
+
+34: <strong>return</strong> X
 </pre>
         </div>
        </div>

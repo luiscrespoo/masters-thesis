@@ -8,77 +8,32 @@ let currentView = null; // Start as null to force initial setup
 let locked = false;
 const LOCK_DURATION = 300; // ms to prevent rapid switching
 
-let headerReady = false;
-let headerReadyPromise = null;
-let pendingMainSwitch = false;
-let headerRevealed = false;
 const HEADER_BOTTOM_MARGIN = 32;
+const HEADER_VISIBILITY_MARGIN = 8;
 
 // Touch state for swipe detection
 let touchStartY = null;
 let touchStartX = null;
 const SWIPE_THRESHOLD = 50; // px minimum swipe distance
 
-function waitForHeaderReady() {
-    if (headerReadyPromise) return headerReadyPromise;
-
-    headerReadyPromise = new Promise(resolve => {
-        const header = document.querySelector('header');
-        if (!header) {
-            headerReady = true;
-            resolve();
-            return;
-        }
-
-        const images = Array.from(header.querySelectorAll('img'));
-        const waitForImages = images.length
-            ? Promise.all(images.map(img => (
-                img.complete
-                    ? Promise.resolve()
-                    : new Promise(res => {
-                        img.addEventListener('load', res, { once: true });
-                        img.addEventListener('error', res, { once: true });
-                    })
-            )))
-            : Promise.resolve();
-
-        const waitForFonts = document.fonts?.ready ?? Promise.resolve();
-
-        Promise.all([waitForImages, waitForFonts]).then(() => {
-            requestAnimationFrame(() => {
-                headerReady = true;
-                resolve();
-            });
-        });
-    });
-
-    headerReadyPromise.then(() => {
-        if (pendingMainSwitch && currentView === 'header' && headerRevealed) {
-            if (isHeaderAtBottom()) {
-                pendingMainSwitch = false;
-                showMain();
-            } else {
-                pendingMainSwitch = false;
-            }
-        }
-    });
-
-    return headerReadyPromise;
-}
-
-function requestMainSwitch() {
-    if (headerReady && headerRevealed && isHeaderAtBottom()) {
-        showMain();
-        return;
-    }
-    pendingMainSwitch = true;
-    waitForHeaderReady();
-}
-
 function isHeaderAtBottom() {
     const header = document.querySelector('header');
     if (!header) return false;
     return header.scrollTop + header.clientHeight >= header.scrollHeight - HEADER_BOTTOM_MARGIN;
+}
+
+function isHeaderReadyToSwitch() {
+    const header = document.querySelector('header');
+    const scrollDownBtn = document.getElementById('scrollDownBtn');
+    if (!header || !scrollDownBtn) return false;
+    if (!scrollDownBtn.classList.contains('revealed')) return false;
+
+    const headerRect = header.getBoundingClientRect();
+    const btnRect = scrollDownBtn.getBoundingClientRect();
+    const btnVisible = btnRect.top >= headerRect.top + HEADER_VISIBILITY_MARGIN &&
+        btnRect.bottom <= headerRect.bottom - HEADER_VISIBILITY_MARGIN;
+
+    return btnVisible && isHeaderAtBottom();
 }
 
 export function initSlides() {
@@ -89,7 +44,6 @@ export function initSlides() {
         history.replaceState(null, '', window.location.pathname);
     }
     showHeader(true); // true = initial load
-    waitForHeaderReady();
 
     // Wheel event - boundary detection with arrow gate
     // Sidebar scrolling is independent - only handle wheel events outside sidebar
@@ -108,9 +62,9 @@ export function initSlides() {
 
             if (scrollBtn && header && e.deltaY > 10) {
                 // Switch when header is scrolled to (or near) the bottom
-                if (isHeaderAtBottom()) {
+                if (isHeaderReadyToSwitch()) {
                     e.preventDefault();
-                    requestMainSwitch();
+                    showMain();
                 } else {
                     // Manually scroll the header element since body has overflow:hidden
                     header.scrollTop += e.deltaY;
@@ -156,8 +110,8 @@ export function initSlides() {
             // Swipe up in header -> check if at bottom
             const header = document.querySelector('header');
             if (header) {
-                if (isHeaderAtBottom()) {
-                    requestMainSwitch();
+                if (isHeaderReadyToSwitch()) {
+                    showMain();
                 }
             }
         } else if (currentView === 'main' && deltaY < 0) {
@@ -197,8 +151,8 @@ export function initSlides() {
         scrollDownBtn.addEventListener('click', (e) => {
             e.preventDefault();
             // Only allow if button is revealed
-            if (scrollDownBtn.classList.contains('revealed')) {
-                requestMainSwitch();
+            if (isHeaderReadyToSwitch()) {
+                showMain();
             }
         });
     }
@@ -208,8 +162,6 @@ function showHeader(isInitial = false) {
     if (currentView === 'header' && !locked && !isInitial) return;
 
     locked = true;
-    headerRevealed = false;
-
     // Hide main content first (for animation) - only if transitioning, not on initial load
     if (currentView === 'main' && !isInitial) {
         hideAllInView('main');
@@ -249,22 +201,13 @@ function showHeader(isInitial = false) {
         // and to create the fade-in animation effect
         setTimeout(() => {
             revealAllInView('header');
-            headerRevealed = true;
-            if (pendingMainSwitch && headerReady) {
-                if (isHeaderAtBottom()) {
-                    pendingMainSwitch = false;
-                    showMain();
-                } else {
-                    pendingMainSwitch = false;
-                }
-            }
         }, isInitial ? 100 : 50);
     });
 
     setTimeout(() => { locked = false; }, LOCK_DURATION);
 }
 
-function showMain(isInitial = false) {
+function showMain(isInitial = false, skipScroll = false) {
     if (currentView === 'main' && !locked && !isInitial) return;
 
     locked = true;
@@ -284,7 +227,9 @@ function showMain(isInitial = false) {
 
     // Wait for DOM update, then scroll and reveal
     requestAnimationFrame(() => {
-        window.scrollTo(0, 0);
+        if (!skipScroll) {
+            window.scrollTo(0, 0);
+        }
 
         // Update sidebar immediately
         const sidebarTitle = document.getElementById('sidebarTitle');
@@ -309,6 +254,6 @@ export function getCurrentView() {
     return currentView;
 }
 
-export function switchToMain() {
-    showMain();
+export function switchToMain(skipScroll = false) {
+    showMain(false, skipScroll);
 }

@@ -11,10 +11,10 @@
 /* Main content area (right side) */
 .main-content {
     flex: 1;
-    margin-left: 400px;
+    margin-left: 360px;
     display: flex;
     justify-content: center;
-    padding: 3rem 2rem;
+    padding: 3rem 7rem;
 }
 
 /* Inner content wrapper with max width */
@@ -30,7 +30,7 @@
 
 /* Fixed sidebar (left side) */
 .sidebar {
-    width: 325px;
+    width: 360px;
     flex-shrink: 0;
     background-color: var(--surface-color);
     border-right: 1px solid var(--border-color);
@@ -61,8 +61,10 @@
     border-radius: 0;
 }
 
-.sidebar-header:hover {
-    background: var(--hover-bg);
+@media (hover: hover) and (pointer: fine) {
+    .sidebar-header:hover {
+        background: var(--hover-bg);
+    }
 }
 
 .sidebar-header.active {
@@ -315,6 +317,7 @@ header {
     margin-bottom: 0;
     position: relative;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     box-sizing: border-box;
 }
 
@@ -716,5 +719,3 @@ footer p {
     color: #fff;
     text-decoration: none;
 }
-
-

@@ -2,7 +2,7 @@
  * Scroll reveal and active TOC tracking.
  */
 
-const REVEAL_SELECTOR = 'header .header-inner > *, main p, main li, main h2, main h3, main h4, main h5, .figure, .equation, .algorithm, blockquote, table, .bib-entry';
+const REVEAL_SELECTOR = 'main p, main li, main h2, main h3, main h4, main h5, .figure, .equation, .algorithm, blockquote, table, .bib-entry';
 const REVEAL_ENTER_MARGIN = 0.95;
 const REVEAL_EXIT_MARGIN = 0.05;
 
@@ -158,6 +158,11 @@ function getLevel(id) {
 
 function updateSidebarHighlighting(activeId) {
     const ancestors = ancestorMap[activeId] || [];
+    const sidebarTitle = document.getElementById('sidebarTitle');
+
+    if (sidebarTitle) {
+        sidebarTitle.classList.remove('active');
+    }
 
     allLinks.forEach(link => {
         link.classList.remove('active');

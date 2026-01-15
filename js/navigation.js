@@ -129,7 +129,8 @@ function initSmoothScroll() {
                     e.preventDefault();
 
                     // Switch to main view if currently viewing header
-                    switchToMain();
+                    // skipScroll=true prevents scrolling to top before navigating to target
+                    switchToMain(true);
 
                     closeSidebar();
 

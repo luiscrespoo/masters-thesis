@@ -2,8 +2,17 @@
    ANIMATIONS
    ============================================================================ */
 
+/* Header content fade - fades in when header view is opened */
+header .header-inner > * {
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+header .header-inner > *.revealed {
+    opacity: 1;
+}
+
 /* Scroll reveal animation - elements fade in as they enter viewport */
-header .header-inner > *,
 main p,
 main li,
 main h2,
@@ -22,7 +31,6 @@ table,
 }
 
 /* Revealed state - visible and in position */
-header .header-inner > *.revealed,
 main p.revealed,
 main li.revealed,
 main h2.revealed,
@@ -38,5 +46,4 @@ table.revealed,
     opacity: 1;
     transform: translateY(0);
 }
-
 

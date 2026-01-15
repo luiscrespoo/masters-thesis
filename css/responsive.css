@@ -72,6 +72,12 @@
         padding: 3.5rem clamp(1.25rem, 6vw, 2rem) 1.5rem;
     }
 
+    header {
+        height: 100svh;
+        max-height: 100svh;
+        padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+    }
+
     /* Smaller captions on mobile */
     .caption {
         font-size: 0.75rem;

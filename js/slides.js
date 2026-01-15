@@ -8,6 +8,11 @@ let currentView = null; // Start as null to force initial setup
 let locked = false;
 const LOCK_DURATION = 300; // ms to prevent rapid switching
 
+// Touch state for swipe detection
+let touchStartY = null;
+let touchStartX = null;
+const SWIPE_THRESHOLD = 50; // px minimum swipe distance
+
 export function initSlides() {
     const sidebarTitle = document.getElementById('sidebarTitle');
 
@@ -54,6 +59,52 @@ export function initSlides() {
             }
         }
     }, { passive: false });
+
+    // Touch events for mobile swipe between header and main
+    window.addEventListener('touchstart', (e) => {
+        // Don't track if inside sidebar
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar && sidebar.contains(e.target)) {
+            touchStartY = null;
+            return;
+        }
+        touchStartY = e.touches[0].clientY;
+        touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+        if (touchStartY === null || locked) return;
+
+        const touchEndY = e.changedTouches[0].clientY;
+        const touchEndX = e.changedTouches[0].clientX;
+        const deltaY = touchStartY - touchEndY;
+        const deltaX = Math.abs(touchStartX - touchEndX);
+
+        // Only trigger if vertical swipe is dominant (not horizontal)
+        if (Math.abs(deltaY) < SWIPE_THRESHOLD || deltaX > Math.abs(deltaY)) {
+            touchStartY = null;
+            return;
+        }
+
+        if (currentView === 'header' && deltaY > 0) {
+            // Swipe up in header -> check if at bottom
+            const header = document.querySelector('header');
+            if (header) {
+                const bottomMargin = 32;
+                const headerAtBottom = header.scrollTop + header.clientHeight >= header.scrollHeight - bottomMargin;
+                if (headerAtBottom) {
+                    showMain();
+                }
+            }
+        } else if (currentView === 'main' && deltaY < 0) {
+            // Swipe down in main -> check if at top
+            if (window.scrollY < 10) {
+                showHeader();
+            }
+        }
+
+        touchStartY = null;
+    }, { passive: true });
 
     // Click on sidebar header -> show header
     const sidebarHeader = document.querySelector('.sidebar-header');
@@ -124,7 +175,10 @@ function showHeader(isInitial = false) {
             a.classList.remove('active', 'ancestor-active');
         });
 
-        history.replaceState(null, '', window.location.pathname);
+        // Only update URL if there's a hash to clear (avoid repeated Safari issues)
+        if (window.location.hash) {
+            history.replaceState(null, '', window.location.pathname);
+        }
 
         // Delay reveal to allow transitions to be enabled (no-transition removed after 50ms)
         // and to create the fade-in animation effect

@@ -65,5 +65,10 @@
     .main-content {
         padding: 3.5rem clamp(1.25rem, 6vw, 2rem) 1.5rem;
     }
+
+    /* Smaller captions on mobile */
+    .caption {
+        font-size: 0.75rem;
+    }
 }
 

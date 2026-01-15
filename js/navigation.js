@@ -32,10 +32,39 @@ function initMobileMenu() {
     if (mainContent) {
         mainContent.addEventListener('click', () => {
             if (window.innerWidth <= 1000) {
-                sidebar.classList.remove('open');
-                document.body.classList.remove('sidebar-open');
+                closeSidebar();
             }
         });
+    }
+
+    // Swipe-to-close gesture for sidebar (swipe left to close)
+    let touchStartX = null;
+    const SWIPE_THRESHOLD = 50;
+
+    sidebar.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+
+    sidebar.addEventListener('touchend', (e) => {
+        if (touchStartX === null) return;
+
+        const touchEndX = e.changedTouches[0].clientX;
+        const deltaX = touchStartX - touchEndX;
+
+        // Swipe left to close (deltaX > 0 means moved left)
+        if (deltaX > SWIPE_THRESHOLD && window.innerWidth <= 1000) {
+            closeSidebar();
+        }
+
+        touchStartX = null;
+    }, { passive: true });
+}
+
+function closeSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) {
+        sidebar.classList.remove('open');
+        document.body.classList.remove('sidebar-open');
     }
 }
 
@@ -95,6 +124,11 @@ function initSmoothScroll() {
                     // Switch to main view if currently viewing header
                     switchToMain();
 
+                    // Close sidebar on mobile after clicking a link
+                    if (window.innerWidth <= 1000) {
+                        closeSidebar();
+                    }
+
                     // Delay to allow view transition, then scroll
                     setTimeout(() => {
                         const targetPosition = target.getBoundingClientRect().top + window.scrollY;
@@ -103,8 +137,6 @@ function initSmoothScroll() {
                             behavior: 'instant'
                         });
                     }, 120);
-
-                    // Don't close sidebar - let user click outside to close it
                 }
             }
         });

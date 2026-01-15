@@ -131,3 +131,40 @@ body.lightbox-open {
         padding: 0.75rem 1rem;
     }
 }
+
+/* Landscape orientation adjustments */
+@media (orientation: landscape) and (max-height: 500px) {
+    .lightbox-container {
+        flex-direction: row;
+        max-width: 95vw;
+        max-height: 95vh;
+        gap: 1rem;
+    }
+
+    .lightbox-content {
+        flex-direction: row;
+        max-height: 90vh;
+        gap: 1rem;
+    }
+
+    .lightbox-image {
+        max-width: 65vw;
+        max-height: 85vh;
+    }
+
+    .lightbox-caption-row {
+        max-width: 30vw;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+
+    .lightbox-caption {
+        text-align: left;
+        max-width: 100%;
+    }
+
+    .lightbox-close {
+        top: 0;
+        right: -30px;
+    }
+}

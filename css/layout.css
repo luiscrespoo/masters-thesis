@@ -30,7 +30,7 @@
 
 /* Fixed sidebar (left side) */
 .sidebar {
-    width: 375px;
+    width: 325px;
     flex-shrink: 0;
     background-color: var(--surface-color);
     border-right: 1px solid var(--border-color);

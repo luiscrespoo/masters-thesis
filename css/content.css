@@ -211,10 +211,7 @@ tr.highlighted-row td:hover {
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.bib-entry:hover {
-    border-color: var(--primary-color);
-    box-shadow: 0 2px 12px rgba(59, 130, 246, 0.1);
-}
+/* Removed hover effect - bibliography entries should not be selectable */
 
 .bib-entry::before {
     content: '';

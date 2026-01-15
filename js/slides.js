@@ -8,10 +8,78 @@ let currentView = null; // Start as null to force initial setup
 let locked = false;
 const LOCK_DURATION = 300; // ms to prevent rapid switching
 
+let headerReady = false;
+let headerReadyPromise = null;
+let pendingMainSwitch = false;
+let headerRevealed = false;
+const HEADER_BOTTOM_MARGIN = 32;
+
 // Touch state for swipe detection
 let touchStartY = null;
 let touchStartX = null;
 const SWIPE_THRESHOLD = 50; // px minimum swipe distance
+
+function waitForHeaderReady() {
+    if (headerReadyPromise) return headerReadyPromise;
+
+    headerReadyPromise = new Promise(resolve => {
+        const header = document.querySelector('header');
+        if (!header) {
+            headerReady = true;
+            resolve();
+            return;
+        }
+
+        const images = Array.from(header.querySelectorAll('img'));
+        const waitForImages = images.length
+            ? Promise.all(images.map(img => (
+                img.complete
+                    ? Promise.resolve()
+                    : new Promise(res => {
+                        img.addEventListener('load', res, { once: true });
+                        img.addEventListener('error', res, { once: true });
+                    })
+            )))
+            : Promise.resolve();
+
+        const waitForFonts = document.fonts?.ready ?? Promise.resolve();
+
+        Promise.all([waitForImages, waitForFonts]).then(() => {
+            requestAnimationFrame(() => {
+                headerReady = true;
+                resolve();
+            });
+        });
+    });
+
+    headerReadyPromise.then(() => {
+        if (pendingMainSwitch && currentView === 'header' && headerRevealed) {
+            if (isHeaderAtBottom()) {
+                pendingMainSwitch = false;
+                showMain();
+            } else {
+                pendingMainSwitch = false;
+            }
+        }
+    });
+
+    return headerReadyPromise;
+}
+
+function requestMainSwitch() {
+    if (headerReady && headerRevealed && isHeaderAtBottom()) {
+        showMain();
+        return;
+    }
+    pendingMainSwitch = true;
+    waitForHeaderReady();
+}
+
+function isHeaderAtBottom() {
+    const header = document.querySelector('header');
+    if (!header) return false;
+    return header.scrollTop + header.clientHeight >= header.scrollHeight - HEADER_BOTTOM_MARGIN;
+}
 
 export function initSlides() {
     const sidebarTitle = document.getElementById('sidebarTitle');
@@ -21,6 +89,7 @@ export function initSlides() {
         history.replaceState(null, '', window.location.pathname);
     }
     showHeader(true); // true = initial load
+    waitForHeaderReady();
 
     // Wheel event - boundary detection with arrow gate
     // Sidebar scrolling is independent - only handle wheel events outside sidebar
@@ -39,12 +108,9 @@ export function initSlides() {
 
             if (scrollBtn && header && e.deltaY > 10) {
                 // Switch when header is scrolled to (or near) the bottom
-                const bottomMargin = 32; // px
-                const headerAtBottom = header.scrollTop + header.clientHeight >= header.scrollHeight - bottomMargin;
-
-                if (headerAtBottom) {
+                if (isHeaderAtBottom()) {
                     e.preventDefault();
-                    showMain();
+                    requestMainSwitch();
                 } else {
                     // Manually scroll the header element since body has overflow:hidden
                     header.scrollTop += e.deltaY;
@@ -90,10 +156,8 @@ export function initSlides() {
             // Swipe up in header -> check if at bottom
             const header = document.querySelector('header');
             if (header) {
-                const bottomMargin = 32;
-                const headerAtBottom = header.scrollTop + header.clientHeight >= header.scrollHeight - bottomMargin;
-                if (headerAtBottom) {
-                    showMain();
+                if (isHeaderAtBottom()) {
+                    requestMainSwitch();
                 }
             }
         } else if (currentView === 'main' && deltaY < 0) {
@@ -134,7 +198,7 @@ export function initSlides() {
             e.preventDefault();
             // Only allow if button is revealed
             if (scrollDownBtn.classList.contains('revealed')) {
-                showMain();
+                requestMainSwitch();
             }
         });
     }
@@ -144,6 +208,7 @@ function showHeader(isInitial = false) {
     if (currentView === 'header' && !locked && !isInitial) return;
 
     locked = true;
+    headerRevealed = false;
 
     // Hide main content first (for animation) - only if transitioning, not on initial load
     if (currentView === 'main' && !isInitial) {
@@ -184,6 +249,15 @@ function showHeader(isInitial = false) {
         // and to create the fade-in animation effect
         setTimeout(() => {
             revealAllInView('header');
+            headerRevealed = true;
+            if (pendingMainSwitch && headerReady) {
+                if (isHeaderAtBottom()) {
+                    pendingMainSwitch = false;
+                    showMain();
+                } else {
+                    pendingMainSwitch = false;
+                }
+            }
         }, isInitial ? 100 : 50);
     });
 

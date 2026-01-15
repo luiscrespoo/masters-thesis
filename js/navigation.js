@@ -20,6 +20,7 @@ function initMobileMenu() {
     const menuToggle = document.getElementById('menuToggle');
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.querySelector('.main-content');
+    const sidebarHeader = document.querySelector('.sidebar-header');
 
     // Toggle sidebar on menu button click
     menuToggle.addEventListener('click', (e) => {
@@ -28,12 +29,18 @@ function initMobileMenu() {
         document.body.classList.toggle('sidebar-open');
     });
 
-    // Close sidebar when clicking on main content (mobile only)
+    // Close sidebar when clicking on main content
     if (mainContent) {
         mainContent.addEventListener('click', () => {
-            if (window.innerWidth <= 1000) {
-                closeSidebar();
-            }
+            closeSidebar();
+        });
+    }
+
+    // Close sidebar when tapping the sidebar title
+    if (sidebarHeader) {
+        sidebarHeader.addEventListener('click', (e) => {
+            if (e.target.closest('.theme-toggle')) return;
+            closeSidebar();
         });
     }
 
@@ -124,10 +131,7 @@ function initSmoothScroll() {
                     // Switch to main view if currently viewing header
                     switchToMain();
 
-                    // Close sidebar on mobile after clicking a link
-                    if (window.innerWidth <= 1000) {
-                        closeSidebar();
-                    }
+                    closeSidebar();
 
                     // Delay to allow view transition, then scroll
                     setTimeout(() => {
